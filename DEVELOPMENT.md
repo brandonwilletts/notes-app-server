@@ -107,11 +107,25 @@ Set-up Separate Environments in Backend with Local "DBs"
 - Create an /api/test API call and test so that it returns DB data
 
 
+***********************************
+Set-up Custom Logger and Middleware
+***********************************
+- utils / logger.ts
+	- Change app.listen to use logger instead of console.log
+- middleware / requestLogger.ts
+- middleware / unknownEndpoint.ts
+- middleware / errorHandler.ts
+- Use middleware via app.use(...)
+
+
+****************************
+Set-up Docker and PostgreSQL
+****************************
 
 
 
-set-up loggers and stuff
-then Postgres?
+
+
 
 -----
 
