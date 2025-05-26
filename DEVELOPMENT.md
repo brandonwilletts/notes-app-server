@@ -116,6 +116,7 @@ Set-up Custom Logger and Middleware
 - middleware / unknownEndpoint.ts
 - middleware / errorHandler.ts
 - Use middleware via app.use(...)
+	- Note: unknownEndpoint and errorHandler must be below api calls
 
 
 ****************************

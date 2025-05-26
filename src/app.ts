@@ -10,8 +10,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(requestLogger);
-app.use(unknownEndpoint);
-app.use(errorHandler);
 
 app.get('/ping', (_req, res) => {
 	console.log('someone pinged here');
@@ -21,5 +19,8 @@ app.get('/ping', (_req, res) => {
 app.get('/api/test', (_req, res) => {
 	res.send(config.getData());
 });
+
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 export default app;
