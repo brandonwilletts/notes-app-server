@@ -6,7 +6,7 @@ services:
     env_file: 
       - .env.production
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - pgdata_production:/var/lib/postgresql/data 
 

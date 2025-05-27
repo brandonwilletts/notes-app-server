@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 dotenv.config({
-	path: path.resolve(process.cwd(), '.env.' + (process.env.NODE_ENV || 'development'))
+	path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`)
 });
 
 if (!process.env.POSTGRES_USER) {
@@ -17,9 +17,14 @@ if (!process.env.POSTGRES_DB) {
 	throw new Error('POSTGRES_DB is not defined');
 }
 
+if (!process.env.POSTGRES_PORT) {
+	throw new Error('POSTGRES_PORT is not defined');
+}
+
 const POSTGRES_USER = process.env.POSTGRES_USER;
 const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
 const POSTGRES_DB = process.env.POSTGRES_DB;
+const POSTGRES_PORT = Number(process.env.POSTGRES_PORT || 5432);
 
 const MODE = process.env.MODE;
 const PORT = 3000;
@@ -30,4 +35,5 @@ export default {
 	POSTGRES_USER,
 	POSTGRES_PASSWORD,
 	POSTGRES_DB,
+	POSTGRES_PORT
 };

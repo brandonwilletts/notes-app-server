@@ -17,6 +17,7 @@ app.use((0, cors_1.default)());
 app.use(requestLogger_1.default);
 const sequelize = new sequelize_1.Sequelize(config_1.default.POSTGRES_DB, config_1.default.POSTGRES_USER, config_1.default.POSTGRES_PASSWORD, {
     host: 'localhost',
+    port: config_1.default.POSTGRES_PORT,
     dialect: 'postgres'
 });
 app.get('/ping', async (_req, res) => {

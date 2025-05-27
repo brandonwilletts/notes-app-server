@@ -103,7 +103,7 @@ Set-up Custom Logger and Middleware
 Set-up Separate Environment Variables
 *************************************
 - npm install dotenv
-- npm install --save-dev cross-env
+- npm install cross-env
 - Modify package.json scripts:
     "test": "cross-env NODE_ENV=test echo \"Error: no test specified\" && exit 1"
     "dev": "cross-env NODE_ENV=development ts-node-dev ./src/server.ts"
@@ -139,12 +139,14 @@ Process (for each DB)
 				env_file: 
 					- .env.development
 				ports:
+					// Use different ports for development, production, and test
 					- "5432:5432"
 				volumes:
 					- pgdata_development:/var/lib/postgresql/data 
 		volumes:
   pgdata_development:
 - Edit package.json to docker-compose up and docker-compose down (remember to use cross-env NODE_ENV=...)
+	- "dev": "cross-env NODE_ENV=development docker-compose -f docker-compose.development.yml up -d && cross-env NODE_ENV=development ts-node-dev ./src/server.ts"
 	- Also add a "clean" script that closes all Docker containers and wipes volumes
 	- Note: For now, test will just spin-up a Docker postgres container -> jest / supertest will run it's own "server"
 To confirm it's working
