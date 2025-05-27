@@ -12,7 +12,6 @@ Set-up initial backend
 File Structure:
 - src/
 	- controllers/
-	- env/
 	- middleware/
 	- models/
 	- requests/
@@ -23,7 +22,7 @@ File Structure:
 	- utils/
 	- app.ts
 	- server.ts
-
+- .env files
 
 *************************************
 Install git, create GitHub repository
@@ -92,15 +91,15 @@ Set-up Separate Environments in Backend with Local "DBs"
 ********************************************************
 - npm install dotenv
 - Modify package.json scripts:
-    "test": "NODE_ENV=testing echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test echo \"Error: no test specified\" && exit 1"
     "dev": "NODE_ENV=development ts-node-dev ./src/server.ts"
     "start": "NODE_ENV=production node build/server.js"
-- Create .env files for test, dev, prod in env/
+- Create .env files for test, dev, prod in root
 		.env.testing
 		.env.development
 		.env.prod
 - Create local "DBs" in data/ for test, dev, prod
-		db.testing.ts
+		db.test.ts
 		db.development.ts
 		db.production.ts
 - Create utils / config.ts, import dotenv, declare variables (use switch statement for DB selection) and export
@@ -119,14 +118,46 @@ Set-up Custom Logger and Middleware
 	- Note: unknownEndpoint and errorHandler must be below api calls
 
 
-****************************
-Set-up Docker and PostgreSQL
-****************************
+************************************
+Set-up PostgreSQL w/ Docker, pgAdmin 
+************************************
+- npm install pg sequelize
+- npm install --save-dev cross-env
+- Create .dockerignore in root:
+		.dockerignore
+		.gitignore
+		node_modules
+		Dockerfile
+- Use utils / config.ts to load the right .env based on NODE_ENV, throw errors if critical environment variable missing, and then export them to be used throughout the app
 
-
-
-
-
+Process (for each DB)
+- In each .env file, define:
+		POSTGRES_USER=postgres
+		POSTGRES_PASSWORD=postgres
+		POSTGRES_DB=db_test
+- Create docker-compose.development/production/test.yml in root (PostgreSQL doesn't require a Dockerfile)
+		services:
+			db:
+				image: postgres
+				container_name: postgres_development
+				restart: always
+				env_file: 
+					- .env.development
+				ports:
+					- "5432:5432"
+				volumes:
+					- pgdata_development:/var/lib/postgresql/data 
+		volumes:
+  pgdata_development:
+- Edit package.json to docker-compose up and docker-compose down (remember to use cross-env NODE_ENV=...)
+	- Also add a "clean" script that closes all Docker containers and wipes volumes
+	- Note: For now, test will just spin-up a Docker postgres container -> jest / supertest will run it's own "server"
+To confirm it's working
+- In app.ts create a new sequelize instance to connect to the DB (/ping api)
+- To run:
+		- Open Docker desktop
+		- npm run dev / npm start (remember to run tsc first)
+		- npm run dev:down / npm run start:down to stop running the container
 
 -----
 

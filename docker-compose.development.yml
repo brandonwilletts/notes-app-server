@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres
+    container_name: postgres_development
+    restart: always
+    env_file: 
+      - .env.development
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_development:/var/lib/postgresql/data 
+
+volumes:
+  pgdata_development:

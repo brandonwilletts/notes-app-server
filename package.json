@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "main": "./src/app.js",
   "scripts": {
-    "test": "NODE_ENV=testing echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_ENV=development ts-node-dev ./src/server.ts",
-    "start": "NODE_ENV=production node build/server.js",
+    "test": "cross-env NODE_ENV=test docker-compose -f docker-compose.test.yml up -d",
+    "test:down": "docker-compose -f docker-compose.test.yml down -v",
+    "dev": "cross-env NODE_ENV=development docker-compose -f docker-compose.development.yml up -d && ts-node-dev ./src/server.ts",
+    "dev:down": "docker-compose -f docker-compose.development.yml down -v",
+    "start": "cross-env NODE_ENV=production docker-compose -f docker-compose.production.yml up -d && node build/server.js",
+    "start:down": "docker-compose -f docker-compose.production.yml down -v",
+    "clean": "docker-compose -f docker-compose.development.yml down -v && docker-compose -f docker-compose.test.yml down -v && docker-compose -f docker-compose.production.yml down -v",
     "tsc": "tsc",
     "lint": "eslint ."
   },
@@ -26,6 +30,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "pg": "^8.16.0",
+    "sequelize": "^6.37.7"
   }
 }

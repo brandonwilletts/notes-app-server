@@ -1,27 +1,33 @@
 import dotenv from 'dotenv';
-import data_dev from '../data/db.development';
-import data_prod from '../data/db.production';
-import data_test from '../data/db.testing';
+import path from 'path';
 
 dotenv.config({
-	path: `./src/env/.env.${process.env.NODE_ENV}`
+	path: path.resolve(process.cwd(), '.env.' + (process.env.NODE_ENV || 'development'))
 });
 
-const DATABASE_NAME = process.env.DATABASE_NAME;
+if (!process.env.POSTGRES_USER) {
+	throw new Error('POSTGRES_USER is not defined');
+}
 
-const getData = () => {
-	switch (process.env.NODE_ENV) {
-		case 'development':
-			return data_dev;
-		case 'production':
-			return data_prod;
-		case 'testing':
-			return data_test;
-		default:
-			return data_dev;
-	}
-};
+if (!process.env.POSTGRES_PASSWORD) {
+	throw new Error('POSTGRES_PASSWORD is not defined');
+}
 
+if (!process.env.POSTGRES_DB) {
+	throw new Error('POSTGRES_DB is not defined');
+}
+
+const POSTGRES_USER = process.env.POSTGRES_USER;
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
+const POSTGRES_DB = process.env.POSTGRES_DB;
+
+const MODE = process.env.MODE;
 const PORT = 3000;
 
-export default { DATABASE_NAME, PORT, getData };
+export default {
+	PORT,
+	MODE,
+	POSTGRES_USER,
+	POSTGRES_PASSWORD,
+	POSTGRES_DB,
+};

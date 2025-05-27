@@ -4,24 +4,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
-const db_development_1 = __importDefault(require("../data/db.development"));
-const db_production_1 = __importDefault(require("../data/db.production"));
-const db_testing_1 = __importDefault(require("../data/db.testing"));
+const path_1 = __importDefault(require("path"));
 dotenv_1.default.config({
-    path: `./src/env/.env.${process.env.NODE_ENV}`
+    path: path_1.default.resolve(process.cwd(), '.env.' + (process.env.NODE_ENV || 'development'))
 });
-const DATABASE_NAME = process.env.DATABASE_NAME;
-const getData = () => {
-    switch (process.env.NODE_ENV) {
-        case 'development':
-            return db_development_1.default;
-        case 'production':
-            return db_production_1.default;
-        case 'testing':
-            return db_testing_1.default;
-        default:
-            return db_development_1.default;
-    }
-};
+if (!process.env.POSTGRES_USER) {
+    throw new Error('POSTGRES_USER is not defined');
+}
+if (!process.env.POSTGRES_PASSWORD) {
+    throw new Error('POSTGRES_PASSWORD is not defined');
+}
+if (!process.env.POSTGRES_DB) {
+    throw new Error('POSTGRES_DB is not defined');
+}
+const POSTGRES_USER = process.env.POSTGRES_USER;
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
+const POSTGRES_DB = process.env.POSTGRES_DB;
+const MODE = process.env.MODE;
 const PORT = 3000;
-exports.default = { DATABASE_NAME, PORT, getData };
+exports.default = {
+    PORT,
+    MODE,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    POSTGRES_DB,
+};
