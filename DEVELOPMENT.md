@@ -7,7 +7,7 @@ Set-up initial backend
 - touch .gitignore
 		node_modules
 		dist
-		env
+		.env.*
 
 File Structure:
 - src/
@@ -23,6 +23,7 @@ File Structure:
 	- app.ts
 	- server.ts
 - .env files
+- docker-compose.yml files
 
 *************************************
 Install git, create GitHub repository
@@ -86,26 +87,6 @@ Set-up Express
 	- http://localhost:3000/ping should return pong
 
 
-********************************************************
-Set-up Separate Environments in Backend with Local "DBs"
-********************************************************
-- npm install dotenv
-- Modify package.json scripts:
-    "test": "NODE_ENV=test echo \"Error: no test specified\" && exit 1"
-    "dev": "NODE_ENV=development ts-node-dev ./src/server.ts"
-    "start": "NODE_ENV=production node build/server.js"
-- Create .env files for test, dev, prod in root
-		.env.testing
-		.env.development
-		.env.prod
-- Create local "DBs" in data/ for test, dev, prod
-		db.test.ts
-		db.development.ts
-		db.production.ts
-- Create utils / config.ts, import dotenv, declare variables (use switch statement for DB selection) and export
-- Create an /api/test API call and test so that it returns DB data
-
-
 ***********************************
 Set-up Custom Logger and Middleware
 ***********************************
@@ -118,11 +99,25 @@ Set-up Custom Logger and Middleware
 	- Note: unknownEndpoint and errorHandler must be below api calls
 
 
+*************************************
+Set-up Separate Environment Variables
+*************************************
+- npm install dotenv
+- npm install --save-dev cross-env
+- Modify package.json scripts:
+    "test": "cross-env NODE_ENV=test echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env NODE_ENV=development ts-node-dev ./src/server.ts"
+    "start": "cross-env NODE_ENV=production node build/server.js"
+- Create .env files for test, dev, prod in root
+		.env.testing
+		.env.development
+		.env.prod
+
+
 ************************************
 Set-up PostgreSQL w/ Docker, pgAdmin 
 ************************************
 - npm install pg sequelize
-- npm install --save-dev cross-env
 - Create .dockerignore in root:
 		.dockerignore
 		.gitignore
