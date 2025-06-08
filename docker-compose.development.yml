@@ -8,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata_development:/var/lib/postgresql/data 
+      - pgdata_development:/var/lib/postgresql/data
 
 volumes:
   pgdata_development:
